@@ -4,9 +4,6 @@ const refs = {
   form: document.querySelector('.form'),
 };
 
-let amountOfPromises = 1;
-let position = 1;
-
 refs.form.addEventListener('submit', onSubmitClick);
 
 function onSubmitClick(e) {
@@ -18,15 +15,8 @@ function onSubmitClick(e) {
 
   let delayForFunction = Number(delay.value);
 
-  const intervalId = setInterval(() => {
-    if (amountOfPromises > Number(amount.value)) {
-      amountOfPromises = 1;
-      position = 1;
-      clearInterval(intervalId);
-      return;
-    }
-
-    createPromise(position, delayForFunction)
+  for (let i = 1; i <= Number(amount.value); i += 1) {
+    createPromise(i, delayForFunction)
       .then(({ position, delay }) => {
         Notiflix.Notify.success(
           `✅ Fulfilled promise ${position} in ${delay}ms`
@@ -38,10 +28,8 @@ function onSubmitClick(e) {
         );
       });
 
-    amountOfPromises += 1;
-    position += 1;
     delayForFunction += Number(step.value);
-  });
+  }
 }
 
 function createPromise(position, delay) {
